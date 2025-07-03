@@ -27,6 +27,7 @@ function App() {
               <Route path="/play-quiz/:slug" element={<PlayQuizPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/edit-quiz/:id" element={<EditQuizPage />} />
+              <Route path="/create-quiz" element={<CreateQuizPage />} />
               {/* For now, let's make dashboard accessible for testing */}
               <Route path="/dashboard" element={<DashboardPage />} />
             </Routes>

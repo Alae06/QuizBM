@@ -19,6 +19,7 @@ class Quiz extends Model
     public function quizAttempts() { return $this->hasMany(QuizAttempt::class); }
     public function statistics() { return $this->hasOne(Statistics::class); }
     
+    
     // Mutateur pour hasher le PIN
     public function setPinAttribute($value)
     {

@@ -66,6 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'recaptcha' => \App\Http\Middleware\RecaptchaMiddleware::class,
         'rate.limit' => \App\Http\Middleware\RateLimitMiddleware::class,
-        'creator' => \App\Http\Middleware\CreatorMiddleware::class,
+        'is_creator' => \App\Http\Middleware\IsCreatorMiddleware::class,
     ];
 } 

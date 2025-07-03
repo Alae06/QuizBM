@@ -12,13 +12,11 @@ use Illuminate\Http\Request;
 
 // Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login'])->middleware('web');
+Route::post('/login', [AuthController::class, 'login']);
 Route::get('/quizzes/public', [App\Http\Controllers\Api\PublicQuizController::class, 'index']);
 Route::get('/quizzes/public/{slug}', [PublicQuizController::class, 'show']);
 Route::post('/quizzes/public/{slug}/attempt', [GameController::class, 'startOrContinueAttempt']);
 Route::post('/quizzes/public/{slug}/submit', [PublicQuizController::class, 'submitAttempt']);
-Route::post('/token-login', [AuthController::class, 'tokenLogin']);
-
 // Routes authentifiées
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -27,13 +25,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Only creators can manage quizzes and questions
-    Route::middleware('creator')->group(function () {
+    // Route::middleware(['is_creator'])->group(function () {
         // CRUD Quiz
         Route::apiResource('quizzes', QuizController::class);
 
         // Questions
         Route::apiResource('quizzes.questions', QuestionController::class)->shallow();
-    });
+    // });
 
     // Statistiques (dashboard)
     Route::get('/statistics/dashboard', [StatisticsController::class, 'dashboard']);

@@ -15,6 +15,7 @@ class VerifyCsrfToken
      */
     public function handle(Request $request, Closure $next): Response
     {
+        dd('CSRF middleware hit!');
         return $next($request);
     }
 }

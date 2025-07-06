@@ -12,7 +12,8 @@ class IsCreatorMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user() || $request->user()->role !== 'Creator') {
+        $user = $request->user();
+        if (!$user || $user->role !== 'creator') {
             abort(403, 'Unauthorized. Only creators can access this resource.');
         }
         return $next($request);

@@ -25,13 +25,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     // Only creators can manage quizzes and questions
-    // Route::middleware(['is_creator'])->group(function () {
+    Route::middleware(\App\Http\Middleware\IsCreatorMiddleware::class)->group(function () {
         // CRUD Quiz
         Route::apiResource('quizzes', QuizController::class);
 
         // Questions
         Route::apiResource('quizzes.questions', QuestionController::class)->shallow();
-    // });
+    });
 
     // Statistiques (dashboard)
     Route::get('/statistics/dashboard', [StatisticsController::class, 'dashboard']);

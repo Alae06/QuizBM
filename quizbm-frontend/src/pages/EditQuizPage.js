@@ -41,22 +41,50 @@ const EditQuizPage = () => {
     };
 
     if (loading) return <LoadingSpinner />;
-    if (error) return <div className="error-message">{error}</div>;
+    if (error) return <div className="alert alert-danger text-center p-4">{error}</div>;
 
     return (
-        <div className="container">
-            <div className="edit-quiz-header">
-                <h1>Edit Quiz</h1>
-                <p className="edit-quiz-desc">Update your quiz details and manage questions below. Click "Add Question" to start building your quiz!</p>
-            </div>
-            <div className="edit-quiz-layout">
-                <div className="edit-quiz-info-card">
-                    <h2>Quiz Details</h2>
-                    <QuizForm onSubmit={handleUpdateQuiz} initialData={quiz} isEditing={true} />
+        <div className="edit-quiz-page">
+            {/* Hero Section */}
+            <div className="hero-section mb-4">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-8 text-center">
+                            <div className="hero-content">
+                                <h1 className="hero-title mb-2">
+                                    <span className="text-primary">Edit Quiz</span>
+                                </h1>
+                                <p className="hero-subtitle mb-0">
+                                    Update your quiz details and manage questions below. Click "Add Question" to start building your quiz!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="edit-quiz-questions-card">
-                    <h2>Questions</h2>
-                    <QuestionManager quiz={quiz} />
+            </div>
+            {/* Main Content */}
+            <div className="container">
+                <div className="row g-4">
+                    <div className="col-lg-6">
+                        <div className="card border-0 shadow-lg mb-4">
+                            <div className="card-header bg-primary p-2 text-dark bg-opacity-25 text-center py-3">
+                                <h3 className="mb-0">Quiz Details</h3>
+                            </div>
+                            <div className="card-body">
+                                <QuizForm onSubmit={handleUpdateQuiz} initialData={quiz} isEditing={true} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6">
+                        <div className="card border-0 shadow-lg mb-4">
+                            <div className="card-header bg-primary p-2 text-dark bg-opacity-25 text-center py-3">
+                                <h3 className="mb-0">Questions</h3>
+                            </div>
+                            <div className="card-body">
+                                <QuestionManager quiz={quiz} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

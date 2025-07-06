@@ -54,53 +54,87 @@ const PlayQuizPage = () => {
     };
 
     if (loading) return <LoadingSpinner />;
-    if (error && !quiz) return <div className="text-red-500 text-center p-8">{error}</div>;
+    if (error && !quiz) return <div className="alert alert-danger text-center p-5">{error}</div>;
 
     if (!isPinVerified) {
         return (
-            <div className="container mx-auto p-4 text-center">
-                <h1 className="text-2xl font-bold mb-4">{quiz.title}</h1>
-                <p className="mb-4">{quiz.description}</p>
-                <form onSubmit={handlePinSubmit} className="max-w-sm mx-auto">
-                    <input
-                        type="password"
-                        value={pin}
-                        onChange={(e) => setPin(e.target.value)}
-                        placeholder="Enter PIN"
-                        className="w-full px-3 py-2 border rounded-md"
-                    />
-                    <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
-                        Enter Quiz
-                    </button>
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
-                </form>
+            <div className="container py-5">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6">
+                        <div className="card shadow border-0">
+                            <div className="card-body text-center">
+                                <h1 className="card-title mb-3">{quiz.title}</h1>
+                                <p className="card-text mb-4">{quiz.description}</p>
+                                <form onSubmit={handlePinSubmit}>
+                                    <div className="mb-3">
+                                        <input
+                                            type="password"
+                                            value={pin}
+                                            onChange={(e) => setPin(e.target.value)}
+                                            placeholder="Enter PIN"
+                                            className="form-control form-control-lg text-center"
+                                        />
+                                    </div>
+                                    <button type="submit" className="btn btn-primary btn-lg w-100">
+                                        Enter Quiz
+                                    </button>
+                                    {error && <div className="alert alert-danger mt-3">{error}</div>}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto p-4">
-            {gameState === 'intro' && (
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold mb-2">{quiz.title}</h1>
-                    <p className="text-lg text-gray-600 mb-6">{quiz.description}</p>
-                    <button onClick={handleStartQuiz} className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-xl">
-                        Start Quiz
-                    </button>
-                </div>
-            )}
-            {gameState === 'playing' && (
-                <QuizPlayer quiz={quiz} onFinish={handleFinishQuiz} />
-            )}
-            {gameState === 'finished' && (
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold mb-2">Quiz Finished!</h1>
-                    <p className="text-2xl mb-6">Your score: {score}%</p>
-                    <div className="max-w-md mx-auto">
-                        <Leaderboard quiz={quiz} />
+        <div className="play-quiz-page">
+            {/* Hero Section */}
+            <div className="hero-section mb-4">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-8 text-center">
+                            <div className="hero-content">
+                                <h1 className="hero-title mb-2">
+                                    <span className="text-primary">{quiz.title}</span>
+                                </h1>
+                                <p className="hero-subtitle mb-0">{quiz.description}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            )}
+            </div>
+            {/* Main Content */}
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-8">
+                        {gameState === 'intro' && (
+                            <div className="card border-0 shadow-lg text-center">
+                                <div className="card-body py-5">
+                                    <button onClick={handleStartQuiz} className="btn btn-success btn-lg px-5">
+                                        Start Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {gameState === 'playing' && (
+                            <QuizPlayer quiz={quiz} onFinish={handleFinishQuiz} />
+                        )}
+                        {gameState === 'finished' && (
+                            <div className="card border-0 shadow-lg text-center">
+                                <div className="card-body py-5">
+                                    <h2 className="mb-3 text-success">Quiz Finished!</h2>
+                                    <p className="fs-3 mb-4">Your score: <span className="fw-bold">{score}%</span></p>
+                                    <div className="mx-auto" style={{ maxWidth: 400 }}>
+                                        <Leaderboard quiz={quiz} />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

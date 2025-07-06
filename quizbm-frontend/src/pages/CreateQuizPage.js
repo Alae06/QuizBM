@@ -32,48 +32,94 @@ const CreateQuizPage = () => {
     };
 
     return (
-        <div className="container">
-            <div style={{textAlign: 'center', marginBottom: '2rem'}}>
-                <div style={{fontWeight: 700, fontSize: '1.2rem', color: '#2563eb'}}>Step 1 of 2: Create Quiz Info</div>
-                <div style={{color: '#666', marginTop: '0.5rem', fontSize: '1rem'}}>
-                    Fill in the quiz details below. After creating, you can add questions.
+        <div className="create-quiz-page">
+            {/* Hero Section */}
+            <div className="hero-section">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-8 text-center">
+                            <div className="hero-content">
+                                <h1 className="hero-title">
+                                    <span className="text-primary">Create Your Quiz</span>
+                                </h1>
+                                <p className="hero-subtitle">
+                                    Build engaging quizzes in minutes. Start with the basics, then add your questions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            {errorMsg && (
-                <div style={{background: '#fee2e2', color: '#b91c1c', borderRadius: '0.5rem', padding: '1rem', marginBottom: '1.5rem', textAlign: 'center', fontWeight: 500}}>
-                    {errorMsg}
-                </div>
-            )}
-            {success ? (
-                <div style={{textAlign: 'center', background: '#e0f2fe', borderRadius: '1rem', padding: '2rem', margin: '2rem auto', maxWidth: 500}}>
-                    <div style={{fontSize: '1.3rem', fontWeight: 700, color: '#2563eb'}}>Quiz created successfully!</div>
-                    <div style={{margin: '1rem 0', color: '#333'}}>Now you can add questions to your quiz.</div>
-                    <button
-                        style={{background: '#2563eb', color: '#fff', fontWeight: 600, padding: '0.7rem 2rem', border: 'none', borderRadius: '0.5rem', fontSize: '1.1rem', cursor: 'pointer', marginRight: '1rem'}}
-                        onClick={() => navigate(`/edit-quiz/${newQuizId}`)}
-                    >
-                        Add Questions
-                    </button>
-                    <button
-                        style={{background: '#f3f4f6', color: '#222', fontWeight: 500, padding: '0.7rem 2rem', border: 'none', borderRadius: '0.5rem', fontSize: '1.1rem', cursor: 'pointer'}}
-                        onClick={() => navigate('/dashboard')}
-                    >
-                        Go to Dashboard
-                    </button>
-                </div>
-            ) : (
-                <>
-                    <QuizForm onSubmit={handleCreateQuiz} />
-                    <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1rem'}}>
-                        <button
-                            style={{background: '#f3f4f6', color: '#222', fontWeight: 500, padding: '0.7rem 2rem', border: 'none', borderRadius: '0.5rem', fontSize: '1.1rem', cursor: 'pointer'}}
-                            onClick={handleCancel}
-                        >
-                            Cancel
-                        </button>
+
+            {/* Main Content */}
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-8">
+                        {errorMsg && (
+                            <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i className="fas fa-exclamation-triangle me-2"></i>
+                                {errorMsg}
+                                <button type="button" className="btn-close" onClick={() => setErrorMsg("")}></button>
+                            </div>
+                        )}
+
+                        {success ? (
+                            <div className="success-card">
+                                <div className="card border-0 shadow-lg">
+                                    <div className="card-body text-center p-5">
+                                        <div className="success-icon mb-4">
+                                            <i className="fas fa-check-circle"></i>
+                                        </div>
+                                        <h2 className="card-title text-success mb-3">Quiz Created Successfully!</h2>
+                                        <p className="card-text text-muted mb-4">
+                                            Your quiz has been created. Now it's time to add some questions to make it engaging!
+                                        </p>
+                                        <div className="d-flex gap-3 justify-content-center flex-wrap">
+                                            <button
+                                                className="btn btn-primary btn-lg"
+                                                onClick={() => navigate(`/edit-quiz/${newQuizId}`)}
+                                            >
+                                                <i className="fas fa-plus me-2"></i>
+                                                Add Questions
+                                            </button>
+                                            <button
+                                                className="btn btn-outline-secondary btn-lg"
+                                                onClick={() => navigate('/dashboard')}
+                                            >
+                                                <i className="fas fa-tachometer-alt me-2"></i>
+                                                Go to Dashboard
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="quiz-form-container">
+                                <div className="card border-0 shadow-lg">
+                                    <div className="card-header bg-primary p-2 text-dark bg-opacity-25 text-center py-4">
+                                        <h3 className="mb-0">
+                                            <i className="fas fa-edit me-2"></i>
+                                            Quiz Information
+                                        </h3>
+                                    </div>
+                                    <div className="card-body p-4">
+                                        <QuizForm onSubmit={handleCreateQuiz} />
+                                    </div>
+                                    <div className="card-footer bg-primary p-2 text-dark bg-opacity-25 text-center py-4">
+                                        <button
+                                            className="btn btn-outline-secondary btn-light"
+                                            onClick={handleCancel}
+                                        >
+                                            <i className="fas fa-times me-2"></i>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                </>
-            )}
+                </div>
+            </div>
         </div>
     );
 };

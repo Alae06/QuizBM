@@ -45,35 +45,47 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="quiz-form">
-            <div className="quiz-form-group">
-                <label htmlFor="title" className="quiz-form-label">Title</label>
+        <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+            <div className="mb-4">
+                <label htmlFor="title" className="form-label fw-bold text-dark">
+                    <i className="fas fa-heading me-2 text-primary"></i>
+                    Quiz Title
+                </label>
                 <input
                     type="text"
                     name="title"
                     id="title"
                     value={quiz.title}
                     onChange={handleChange}
-                    className={`quiz-form-input${errors.title ? ' quiz-form-input-error' : ''}`}
+                    className={`form-control form-control-lg ${errors.title ? 'is-invalid' : ''}`}
+                    placeholder="Enter your quiz title..."
+                    required
                 />
-                {errors.title && <p className="quiz-form-error">{errors.title}</p>}
+                {errors.title && <div className="invalid-feedback">{errors.title}</div>}
             </div>
 
-            <div className="quiz-form-group">
-                <label htmlFor="description" className="quiz-form-label">Description</label>
+            <div className="mb-4">
+                <label htmlFor="description" className="form-label fw-bold text-dark">
+                    <i className="fas fa-align-left me-2 text-primary"></i>
+                    Description
+                </label>
                 <textarea
                     name="description"
                     id="description"
                     value={quiz.description}
                     onChange={handleChange}
-                    rows="3"
-                    className="quiz-form-textarea"
+                    rows="4"
+                    className="form-control"
+                    placeholder="Describe your quiz..."
                 ></textarea>
             </div>
 
-            <div className="quiz-form-row">
-                <div className="quiz-form-group">
-                    <label htmlFor="max_attempts" className="quiz-form-label">Max Attempts</label>
+            <div className="row mb-4">
+                <div className="col-md-6">
+                    <label htmlFor="max_attempts" className="form-label fw-bold text-dark">
+                        <i className="fas fa-redo me-2 text-primary"></i>
+                        Max Attempts
+                    </label>
                     <input
                         type="number"
                         name="max_attempts"
@@ -82,11 +94,15 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
                         onChange={handleChange}
                         min="1"
                         max="10"
-                        className="quiz-form-input"
+                        className="form-control"
                     />
+                    <div className="form-text">Number of times users can retake the quiz</div>
                 </div>
-                <div className="quiz-form-group">
-                    <label htmlFor="time_per_question" className="quiz-form-label">Time per Question (seconds)</label>
+                <div className="col-md-6">
+                    <label htmlFor="time_per_question" className="form-label fw-bold text-dark">
+                        <i className="fas fa-clock me-2 text-primary"></i>
+                        Time per Question (seconds)
+                    </label>
                     <input
                         type="number"
                         name="time_per_question"
@@ -95,30 +111,36 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
                         onChange={handleChange}
                         min="5"
                         max="300"
-                        className="quiz-form-input"
+                        className="form-control"
                     />
+                    <div className="form-text">Time limit for each question</div>
                 </div>
             </div>
 
-            <div className="quiz-form-group">
-                <label htmlFor="pin" className="quiz-form-label">PIN (optional)</label>
+            <div className="mb-4">
+                <label htmlFor="pin" className="form-label fw-bold text-dark">
+                    <i className="fas fa-key me-2 text-primary"></i>
+                    PIN (Optional)
+                </label>
                 <input
                     type="text"
                     name="pin"
                     id="pin"
                     value={quiz.pin}
                     onChange={handleChange}
-                    className={`quiz-form-input${errors.pin ? ' quiz-form-input-error' : ''}`}
-                    placeholder="4-10 characters"
+                    className={`form-control ${errors.pin ? 'is-invalid' : ''}`}
+                    placeholder="4-10 characters (optional)"
                 />
-                {errors.pin && <p className="quiz-form-error">{errors.pin}</p>}
+                {errors.pin && <div className="invalid-feedback">{errors.pin}</div>}
+                <div className="form-text">Add a PIN for additional security</div>
             </div>
 
-            <div className="quiz-form-actions">
+            <div className="d-grid " >
                 <button
                     type="submit"
-                    className="quiz-form-button"
+                    className="btn btn-quiz btn-lg btn-outline-secondary"
                 >
+                    <i className="fas fa-star me-2"></i>
                     {isEditing ? 'Update Quiz' : 'Create Quiz'}
                 </button>
             </div>

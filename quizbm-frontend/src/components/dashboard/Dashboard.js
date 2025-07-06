@@ -65,45 +65,54 @@ const Dashboard = () => {
     };
 
     if (loading) return <LoadingSpinner />;
-    if (error) return <div className="text-red-500">{error}</div>;
+    if (error) return <div className="alert alert-danger text-center">{error}</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-10 px-2 animate-fade-in">
-            <div className="max-w-4xl mx-auto">
-                {/* Hero Section */}
-                <div className="flex flex-col items-center justify-center mb-10">
-                    <div className="bg-white rounded-full shadow-lg p-4 mb-4 animate-bounce-slow">
-                        {user?.role === 'creator' ? (
-                            <AcademicCapIcon width={64} height={64} className="text-indigo-600" />
-                        ) : (
-                            <UserGroupIcon width={64} height={64} className="text-pink-500" />
-                        )}
-                    </div>
-                    <h1 className="text-4xl font-extrabold text-white drop-shadow mb-2 tracking-tight">
-                        {user?.role === 'creator' ? 'Welcome, Quiz Creator!' : 'Welcome, Quiz Participant!'}
-                    </h1>
-                    <p className="text-lg text-white/80 mb-2 text-center max-w-xl">
-                        {user?.role === 'creator'
-                            ? 'Create, manage, and analyze your quizzes with ease. Inspire learning and fun!'
-                            : 'Take quizzes, track your progress, and challenge yourself or friends!'}
-                    </p>
+        <div className="dashboard-content py-4">
+            {/* Hero Icon and Welcome */}
+            <div className="text-center mb-4">
+                <div className="mb-3">
+                    {user?.role === 'creator' ? (
+                        <span className="d-inline-block bg-white rounded-circle shadow p-3 mb-2">
+                            <AcademicCapIcon width={48} height={48} className="text-primary" />
+                        </span>
+                    ) : (
+                        <span className="d-inline-block bg-white rounded-circle shadow p-3 mb-2">
+                            <UserGroupIcon width={48} height={48} className="text-primary" />
+                        </span>
+                    )}
                 </div>
-                <div className="bg-white/90 rounded-2xl shadow-2xl p-8 mb-8 backdrop-blur-md">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                        <StatsCard title="Total Quizzes" value={stats.totalQuizzes} />
-                        <StatsCard title="Total Attempts" value={stats.totalAttempts} />
+                <h2 className="fw-bold mb-1">
+                    {user?.role === 'creator' ? 'Welcome, Quiz Creator!' : 'Welcome, Quiz Participant!'}
+                </h2>
+                <p className="text-muted mb-0">
+                    {user?.role === 'creator'
+                        ? 'Create, manage, and analyze your quizzes with ease. Inspire learning and fun!'
+                        : 'Take quizzes, track your progress, and challenge yourself or friends!'}
+                </p>
+            </div>
+            {/* Main Card */}
+            <div className="card border-0 shadow-lg mb-4">
+                <div className="card-body">
+                    <div className="row mb-4">
+                        <div className="col-md-6 mb-3 mb-md-0">
+                            <StatsCard title="Total Quizzes" value={stats.totalQuizzes} />
+                        </div>
+                        <div className="col-md-6">
+                            <StatsCard title="Total Attempts" value={stats.totalAttempts} />
+                        </div>
                     </div>
                     {user?.role === 'creator' && (
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-indigo-700">My Quizzes</h2>
-                            <Link to="/create-quiz" className="bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-bold py-2 px-6 rounded shadow-md transition-all duration-200 transform hover:scale-105">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h3 className="h5 text-primary mb-0">My Quizzes</h3>
+                            <Link to="/create-quiz" className="btn btn-primary btn-lg">
                                 + Create New Quiz
                             </Link>
                         </div>
                     )}
                     {user?.role !== 'creator' && (
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold text-pink-600">Available Quizzes</h2>
+                        <div className="mb-3">
+                            <h3 className="h5 text-primary mb-0">Available Quizzes</h3>
                         </div>
                     )}
                     <QuizList quizzes={quizzes} isCreator={user?.role === 'creator'} onQuizDeleted={refreshQuizzes} />

@@ -5,16 +5,34 @@ import { useAuth } from '../../context/AuthContext';
 const LoginForm = () => {
     const [form, setForm] = useState({ email: '', password: '' });
     const [error, setError] = useState(null);
+    const [touched, setTouched] = useState({ email: false, password: false });
+    const [submitAttempted, setSubmitAttempted] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+        setTouched({ ...touched, [e.target.name]: true });
     };
+
+    const handleBlur = (e) => {
+        setTouched({ ...touched, [e.target.name]: true });
+    };
+
+    const validate = () => {
+        return {
+            email: !form.email ? 'Email is required.' : '',
+            password: !form.password ? 'Password is required.' : '',
+        };
+    };
+
+    const errors = validate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitAttempted(true);
         setError('');
+        if (errors.email || errors.password) return;
         try {
             await login(form.email, form.password);
             navigate('/dashboard');
@@ -25,23 +43,45 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-            <form onSubmit={handleSubmit} className="bg-white/90 p-8 rounded-2xl shadow-2xl w-full max-w-md space-y-6">
-                <h2 className="text-3xl font-extrabold text-center text-indigo-700 mb-4">Sign In</h2>
-                {error && <div className="text-red-500 text-center mb-2">{error}</div>}
-                <div>
-                    <label className="block text-gray-700 font-semibold mb-1">Email</label>
-                    <input name="email" value={form.email} onChange={handleChange} type="email" required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400" />
-                </div>
-                <div>
-                    <label className="block text-gray-700 font-semibold mb-1">Password</label>
-                    <input name="password" value={form.password} onChange={handleChange} type="password" required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400" />
-                </div>
-                <button type="submit" className="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-bold py-2 rounded-lg shadow-md hover:from-indigo-600 hover:to-pink-600 transition-all">
-                    Login
-                </button>
-            </form>
-        </div>
+        <form onSubmit={handleSubmit} className="p-3" noValidate>
+            <h2 className="text-center mb-4">Sign In</h2>
+            {error && <div className="alert alert-danger text-center mb-3">{error}</div>}
+            <div className="mb-3">
+                <label htmlFor="loginEmail" className="form-label">Email</label>
+                <input
+                    id="loginEmail"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="email"
+                    className={`form-control${(submitAttempted || touched.email) && errors.email ? ' is-invalid' : ''}`}
+                    autoComplete="username"
+                />
+                {(submitAttempted || touched.email) && errors.email && (
+                    <div className="invalid-feedback d-block">{errors.email}</div>
+                )}
+            </div>
+            <div className="mb-4">
+                <label htmlFor="loginPassword" className="form-label">Password</label>
+                <input
+                    id="loginPassword"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="password"
+                    className={`form-control${(submitAttempted || touched.password) && errors.password ? ' is-invalid' : ''}`}
+                    autoComplete="current-password"
+                />
+                {(submitAttempted || touched.password) && errors.password && (
+                    <div className="invalid-feedback d-block">{errors.password}</div>
+                )}
+            </div>
+            <button type="submit" className="btn btn-primary btn-lg w-100">
+                Login
+            </button>
+        </form>
     );
 };
 

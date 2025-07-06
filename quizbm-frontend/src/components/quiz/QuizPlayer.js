@@ -17,6 +17,7 @@ const QuizPlayer = ({ quiz, onFinish }) => {
     const [quizResults, setQuizResults] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [questionFeedback, setQuestionFeedback] = useState({});
+    const [nameError, setNameError] = useState('');
 
     // Only depend on quiz.questions and currentQuestionIndex
     const currentQuestion = quiz.questions[currentQuestionIndex];
@@ -115,9 +116,12 @@ const QuizPlayer = ({ quiz, onFinish }) => {
 
     const handleStart = (e) => {
         e.preventDefault();
-        if(participantName.trim()){
+        if (participantName.trim()) {
             setHasStarted(true);
             setStartTime(Date.now());
+            setNameError('');
+        } else {
+            setNameError('Please enter your name.');
         }
     };
 
@@ -142,68 +146,25 @@ const QuizPlayer = ({ quiz, onFinish }) => {
     // Show results screen if quiz is finished
     if (showResults && quizResults) {
         return (
-            <div className="quiz-results">
-                <div className="quiz-results-header">
-                    <h1 className="text-3xl font-bold mb-4">Quiz Results</h1>
-                    <div className="quiz-results-score">
-                        {quizResults.score}%
-                    </div>
-                    <div className="text-xl text-gray-600 mb-6">
-                        You got {quizResults.correct_answers} out of {quizResults.total_questions} questions correct
-                    </div>
-                    <div className="quiz-results-summary">
-                        <div className="text-lg font-semibold mb-2">Summary</div>
-                        <div className="quiz-results-stats">
-                            <div>
-                                <div className="quiz-results-correct text-2xl">{quizResults.correct_answers}</div>
-                                <div className="text-sm text-gray-600">Correct</div>
-                            </div>
-                            <div>
-                                <div className="quiz-results-incorrect text-2xl">{quizResults.total_questions - quizResults.correct_answers}</div>
-                                <div className="text-sm text-gray-600">Incorrect</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="quiz-results-questions">
-                    <h2 className="text-2xl font-bold mb-4">Question Review</h2>
+            <div className="card border-0 shadow-lg mb-4">
+                <div className="card-body text-center">
+                    <h2 className="mb-3 text-success">Quiz Results</h2>
+                    <div className="fs-1 fw-bold mb-3">{quizResults.score}%</div>
+                    <div className="mb-4">You got {quizResults.correct_answers} out of {quizResults.total_questions} questions correct</div>
+                    <h4 className="mb-3">Question Review</h4>
                     {quizResults.feedback.map((item, index) => (
-                        <div key={item.question_id} className="quiz-results-question">
-                            <div className="quiz-results-question-header">
-                                <h3 className="text-lg font-semibold">
-                                    Question {index + 1}
-                                </h3>
-                                <div className={`quiz-results-status ${item.is_correct ? 'correct' : 'incorrect'}`}>
-                                    {item.is_correct ? 'Correct' : 'Incorrect'}
-                                </div>
+                        <div key={item.question_id} className="mb-4 p-3 border rounded bg-light text-start">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <span className="fw-semibold">Question {index + 1}</span>
+                                <span className={`badge ${item.is_correct ? 'bg-success' : 'bg-danger'}`}>{item.is_correct ? 'Correct' : 'Incorrect'}</span>
                             </div>
-                            <p className="text-gray-700 mb-4">{item.question_text}</p>
-                            <div className="quiz-results-answers">
-                                <div className="quiz-results-answer-row">
-                                    <span className="quiz-results-answer-label">Your answer:</span>
-                                    <span className={`quiz-results-answer-value ${item.is_correct ? 'correct' : 'incorrect'}`}>
-                                        {item.participant_answer || 'No answer'}
-                                    </span>
-                                </div>
-                                {!item.is_correct && (
-                                    <div className="quiz-results-answer-row">
-                                        <span className="quiz-results-answer-label">Correct answer:</span>
-                                        <span className="quiz-results-answer-value correct">
-                                            {item.correct_answer}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
+                            <div className="mb-2">{item.question_text}</div>
+                            <div><strong>Your answer:</strong> {item.participant_answer || <span className="text-muted">No answer</span>}</div>
+                            {!item.is_correct && (
+                                <div><strong>Correct answer:</strong> {item.correct_answer}</div>
+                            )}
                         </div>
                     ))}
-                </div>
-                <div className="text-center">
-                    <button
-                        onClick={() => window.location.href = '/'}
-                        className="quiz-results-back-button"
-                    >
-                        Back to Home
-                    </button>
                 </div>
             </div>
         );
@@ -211,20 +172,24 @@ const QuizPlayer = ({ quiz, onFinish }) => {
 
     if (!hasStarted) {
         return (
-            <div className="text-center">
-                <form onSubmit={handleStart}>
-                    <input
-                        type="text"
-                        placeholder="Enter your name"
-                        value={participantName}
-                        onChange={(e) => setParticipantName(e.target.value)}
-                        className="text-lg p-2 border rounded"
-                        required
-                    />
-                    <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
-                        Start Quiz
-                    </button>
-                </form>
+            <div className="card border-0 shadow-lg mb-4">
+                <div className="card-body text-center py-5">
+                    <form onSubmit={handleStart} className="row g-2 justify-content-center align-items-center">
+                        <div className="col-md-6">
+                            <input
+                                type="text"
+                                className={`form-control form-control-lg${nameError ? ' is-invalid' : ''}`}
+                                placeholder="Enter your name"
+                                value={participantName}
+                                onChange={e => setParticipantName(e.target.value)}
+                            />
+                            {nameError && <div className="invalid-feedback d-block">{nameError}</div>}
+                        </div>
+                        <div className="col-md-4">
+                            <button type="submit" className="btn btn-success btn-lg w-100">Start Quiz</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         );
     }
@@ -240,103 +205,49 @@ const QuizPlayer = ({ quiz, onFinish }) => {
     console.log('RENDER', { selectedChoice, showFeedback, timeLeft });
 
     return (
-        <div className="max-w-2xl mx-auto p-6">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold">{quiz.title}</h1>
-                    <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg font-bold">
-                        Time Left: {timeLeft}s
-                    </div>
-                </div>
-                <div className="mb-6">
-                    <div className="flex justify-between text-sm text-gray-600 mb-2">
-                        <span>Question {currentQuestionIndex + 1} of {quiz.questions.length}</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                            style={{
-                                width: `${((currentQuestionIndex + 1) / quiz.questions.length) * 100}%`
-                            }}
-                        ></div>
-                    </div>
-                </div>
-                <div className="mb-8">
-                    <h2 className="text-xl font-semibold mb-6">
-                        {currentQuestion?.question_text}
-                    </h2>
-                    <div className="space-y-3">
-                        {currentQuestion?.choices.map((choice, index) => {
-                            let choiceClass = 'block w-full p-4 text-left border-2 rounded-lg transition-all mb-2';
-                            let icon = null;
-                            if (showFeedback) {
-                                if (choice.id === correctChoiceId) {
-                                    choiceClass += ' border-green-500 bg-green-50';
-                                    icon = <span className="mr-2 text-green-600 font-bold">✓</span>;
-                                } else if (selectedChoice === choice.id) {
-                                    choiceClass += ' border-red-500 bg-red-50';
-                                    icon = <span className="mr-2 text-red-600 font-bold">✗</span>;
-                                } else {
-                                    choiceClass += ' border-gray-200 bg-gray-100 text-gray-400';
-                                }
-                            } else if (selectedChoice === choice.id) {
-                                choiceClass += ' border-blue-500 bg-blue-50';
-                            } else {
-                                choiceClass += ' border-gray-200 hover:border-gray-300';
-                            }
-                            return (
-                                <button
-                                    key={choice.id}
-                                    onClick={() => handleAnswerSelect(choice.id)}
-                                    className={choiceClass}
-                                    disabled={showFeedback}
-                                    type="button"
-                                >
-                                    <span className="font-medium mr-3">
-                                        {String.fromCharCode(65 + index)}.
-                                    </span>
-                                    {icon}
-                                    {choice.text}
-                                </button>
-                            );
-                        })}
-                    </div>
-                    
-                    {/* Enhanced feedback message */}
-                    {showFeedback && currentFeedback && (
-                        <div className={`mt-6 p-4 rounded-lg ${currentFeedback.isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                            <div className="font-bold mb-2">
-                                {currentFeedback.isCorrect ? '✓ Correct!' : '✗ Incorrect'}
-                            </div>
-                            <div className="text-sm">
-                                <div className="mb-1">
-                                    <span className="font-medium">Your answer:</span> {currentFeedback.participantAnswer || 'No answer'}
-                                </div>
-                                {!currentFeedback.isCorrect && (
-                                    <div>
-                                        <span className="font-medium">Correct answer:</span> {currentFeedback.correctAnswer}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <div className="flex justify-end gap-2">
-                    {showFeedback ? (
+        <div className="card border-0 shadow-lg mb-4">
+            <div className="card-body">
+                <h3 className="card-title mb-3">{quiz.title}</h3>
+                <div className="mb-2 text-muted">Time Left: {timeLeft}s</div>
+                <div className="mb-2">Question {currentQuestionIndex + 1} of {quiz.questions.length}</div>
+                <div className="mb-4 fw-bold fs-5">{currentQuestion.question_text}</div>
+                <div className="list-group mb-4">
+                    {currentQuestion.choices.map(choice => (
                         <button
+                            key={choice.id}
+                            type="button"
+                            className={`list-group-item list-group-item-action${selectedChoice === choice.id ? ' active' : ''}${showFeedback && choice.is_correct ? ' list-group-item-success' : ''}`}
+                            disabled={showFeedback}
+                            onClick={() => handleAnswerSelect(choice.id)}
+                        >
+                            {choice.text}
+                        </button>
+                    ))}
+                </div>
+                {showFeedback && (
+                    <div className={`alert ${questionFeedback[currentQuestion.id]?.isCorrect ? 'alert-success' : 'alert-danger'} text-center`}>
+                        {questionFeedback[currentQuestion.id]?.isCorrect ? 'Correct!' : (
+                            <>
+                                Incorrect. The correct answer is: <strong>{questionFeedback[currentQuestion.id]?.correctAnswer}</strong>
+                            </>
+                        )}
+                    </div>
+                )}
+                <div className="d-flex justify-content-between align-items-center">
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleSubmitAnswer}
+                        disabled={selectedChoice === null || showFeedback}
+                    >
+                        Submit Answer
+                    </button>
+                    {showFeedback && (
+                        <button
+                            className="btn btn-outline-secondary"
                             onClick={handleNextQuestion}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                             disabled={isSubmitting}
                         >
-                            {currentQuestionIndex === quiz.questions.length - 1 ? 'Submit Quiz' : 'Next'}
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleSubmitAnswer}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                            disabled={selectedChoice === null}
-                        >
-                            Submit Answer
+                            {currentQuestionIndex < quiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
                         </button>
                     )}
                 </div>

@@ -17,36 +17,36 @@ const QuizCard = ({ quiz, isCreator, onDelete }) => {
     };
 
     return (
-        <div className="bg-gradient-to-br from-white via-indigo-50 to-pink-100 shadow-xl rounded-2xl overflow-hidden transition-transform hover:scale-105 hover:shadow-2xl border border-indigo-100">
-            <div className="p-6">
-                <h3 className="font-extrabold text-2xl mb-2 text-indigo-700 tracking-tight drop-shadow">{quiz.title}</h3>
-                <p className="text-gray-700 text-base mb-4">
+        <div className="card mb-4 shadow-sm border-primary">
+            <div className="card-body">
+                <h3 className="card-title fw-bold text-primary mb-2">{quiz.title}</h3>
+                <p className="card-text text-muted mb-3">
                     {quiz.description || 'No description available.'}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-semibold text-indigo-700">
+                <div className="mb-3">
+                    <span className="badge bg-primary me-2">
                         {quiz.questions_count} Questions
                     </span>
-                    <span className="inline-block bg-pink-100 rounded-full px-3 py-1 text-sm font-semibold text-pink-600">
+                    <span className="badge bg-info text-dark">
                         {quiz.quiz_attempts_count} Attempts
                     </span>
                 </div>
-                <div className="flex justify-end space-x-2 mt-4">
-                    <button onClick={handleShare} title="Share" className="flex items-center gap-1 text-sm bg-green-400 hover:bg-green-500 text-white py-1 px-3 rounded shadow transition-all">
-                        <ShareIcon width={20} height={20} /> Share
+                <div className="d-flex flex-wrap gap-2 justify-content-end mt-3">
+                    <button onClick={handleShare} title="Share" className="btn btn-outline-success btn-sm d-flex align-items-center gap-1">
+                        <ShareIcon width={18} height={18} /> Share
                     </button>
                     {isCreator ? (
                         <>
-                            <Link to={`/edit-quiz/${quiz.id}`} title="Edit" className="flex items-center gap-1 text-sm bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded shadow transition-all">
-                                <PencilSquareIcon width={20} height={20} /> Edit
+                            <Link to={`/edit-quiz/${quiz.id}`} title="Edit" className="btn btn-outline-warning btn-sm d-flex align-items-center gap-1">
+                                <PencilSquareIcon width={18} height={18} /> Edit
                             </Link>
-                            <button onClick={onDelete} title="Delete" className="flex items-center gap-1 text-sm bg-red-400 hover:bg-red-500 text-white py-1 px-3 rounded shadow transition-all">
-                                <TrashIcon width={20} height={20} /> Delete
+                            <button onClick={onDelete} title="Delete" className="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">
+                                <TrashIcon width={18} height={18} /> Delete
                             </button>
                         </>
                     ) : (
-                        <Link to={`/play-quiz/${quiz.slug}`} title="Play" className="flex items-center gap-1 text-sm bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-3 rounded shadow transition-all">
-                            <PlayCircleIcon width={20} height={20} /> Play
+                        <Link to={`/play-quiz/${quiz.slug}`} title="Play" className="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                            <PlayCircleIcon width={18} height={18} /> Play
                         </Link>
                     )}
                 </div>

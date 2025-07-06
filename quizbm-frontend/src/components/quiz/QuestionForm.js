@@ -94,82 +94,78 @@ const QuestionForm = ({ onSubmit, onCancel, initialData = null, isEditing = fals
     }, [type]);
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium text-gray-700">Question Text</label>
+        <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+                <label className="form-label">Question Text</label>
                 <input
                     type="text"
                     value={questionText}
                     onChange={(e) => setQuestionText(e.target.value)}
-                    className={`mt-1 block w-full px-3 py-2 border ${errors.questionText ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm`}
-                    required
+                    className={`form-control${errors.questionText ? ' is-invalid' : ''}`}
+                    placeholder="Enter your question"
                 />
-                {errors.questionText && <p className="text-red-500 text-xs mt-1">{errors.questionText}</p>}
+                {errors.questionText && <div className="invalid-feedback d-block">{errors.questionText}</div>}
             </div>
-            
-            <div>
-                <label className="block text-sm font-medium text-gray-700">Question Type</label>
-                <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+            <div className="mb-3">
+                <label className="form-label">Question Type</label>
+                <select value={type} onChange={(e) => setType(e.target.value)} className="form-select">
                     <option value="multiple_choice">Multiple Choice</option>
                     <option value="true_false">True/False</option>
                 </select>
             </div>
-
-            <fieldset>
-                <legend className="text-sm font-medium text-gray-700">Choices</legend>
-                <div className="space-y-2 mt-2">
+            <fieldset className="mb-3">
+                <legend className="form-label mb-2">Choices</legend>
+                <ul className="list-group mb-2">
                     {choices.map((choice, index) => (
-                        <div key={index} className="flex items-center space-x-2">
+                        <li key={index} className="list-group-item d-flex align-items-center gap-2">
                             <input
                                 type={type === 'multiple_choice' ? 'checkbox' : 'radio'}
                                 name={type === 'multiple_choice' ? `choice-${index}`: 'correct_choice'}
                                 checked={!!choice.is_correct}
                                 onChange={(e) => handleChoiceChange(index, 'is_correct', e.target.checked)}
                                 disabled={type === 'true_false'}
+                                className="form-check-input mt-0"
+                                style={{marginRight: 8}}
                             />
                             <input
                                 type="text"
                                 value={choice.text}
                                 onChange={(e) => handleTextChange(index, e.target.value)}
-                                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                                className="form-control me-2"
                                 placeholder={`Choice ${index + 1}`}
-                                required
                                 disabled={type === 'true_false'}
                             />
                             {type === 'multiple_choice' && (
-                                <button type="button" onClick={() => removeChoice(index)} className="text-red-500 hover:text-red-700">
-                                    X
+                                <button type="button" onClick={() => removeChoice(index)} className="btn btn-outline-danger btn-sm">
+                                    <i className="bi bi-x-lg"></i>
                                 </button>
                             )}
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ul>
                 {type === 'multiple_choice' && choices.length < 6 && (
-                    <button type="button" onClick={addChoice} className="mt-2 text-sm text-blue-500 hover:text-blue-700">
+                    <button type="button" onClick={addChoice} className="btn btn-outline-primary btn-sm mb-2">
                         + Add Choice
                     </button>
                 )}
-                {errors.choices && <p className="text-red-500 text-xs mt-1">{errors.choices}</p>}
+                {errors.choices && <div className="invalid-feedback d-block">{errors.choices}</div>}
             </fieldset>
-
-            <div>
-                <label className="block text-sm font-medium text-gray-700">Time per Question (seconds)</label>
+            <div className="mb-3">
+                <label className="form-label">Time per Question (seconds)</label>
                 <input
                     type="number"
                     min={5}
                     max={300}
                     value={timePerQuestion}
                     onChange={e => setTimePerQuestion(Number(e.target.value))}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                    required
+                    className="form-control"
                 />
             </div>
-
-            <div className="flex justify-end space-x-2">
-                <button type="button" onClick={onCancel} className="bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded">
+            <div className="d-flex gap-2 justify-content-end">
+                <button type="button" onClick={onCancel} className="btn btn-outline-secondary">
                     Cancel
                 </button>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <button type="submit" className="btn btn-primary">
                     {isEditing ? 'Update Question' : 'Add Question'}
                 </button>
             </div>

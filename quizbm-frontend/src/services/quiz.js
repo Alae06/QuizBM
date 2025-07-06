@@ -1,4 +1,3 @@
-// src/services/quiz.js
 import api from './api';
 
 const quizService = {
@@ -19,6 +18,8 @@ const quizService = {
   getPublicQuizzes: () => api.get('/quizzes/public'),
   getPublicQuiz: (slug) => api.get(`/quizzes/public/${slug}`),
   submitAttempt: (slug, payload) => api.post(`/quizzes/public/${slug}/submit`, payload),
+
+  getQuestion: (questionId) => api.get(`/questions/${questionId}`),
 };
 
 export default quizService;

@@ -50,11 +50,6 @@ class GameController extends Controller
     {
         $quiz = Quiz::where('slug', $slug)->firstOrFail();
         
-        // Validation PIN si nécessaire
-        if ($quiz->pin && !Hash::check($request->pin, $quiz->pin)) {
-            return response()->json(['error' => 'PIN incorrect'], 403);
-        }
-        
         // Calcul du score
         $score = $this->calculateScore($request->answers, $quiz);
         

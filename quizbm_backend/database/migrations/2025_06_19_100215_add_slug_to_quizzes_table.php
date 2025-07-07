@@ -8,7 +8,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('quizzes', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('pin');
+            $table->string('slug')->unique();
         });
     }
 

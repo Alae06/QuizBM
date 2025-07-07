@@ -73,6 +73,9 @@ class QuestionController extends Controller
     {
         $this->authorize('update', $question->quiz);
 
+        // Debug: Log the incoming request
+        \Log::info('Question Update Request:', $request->all());
+
         $validatedData = $request->validate([
             'question_text' => 'sometimes|required|string|max:1000',
             'type' => ['sometimes', 'required', Rule::in(['multiple_choice', 'true_false'])],
@@ -82,10 +85,16 @@ class QuestionController extends Controller
             'choices.*.is_correct' => 'required|boolean',
         ]);
 
+        // Debug: Log the validated data
+        \Log::info('Validated Question Data:', $validatedData);
+
         $question->update($request->only(['question_text', 'type', 'time_per_question']));
 
         if ($request->has('choices')) {
             $question->choices()->delete();
+            
+            // Debug: Log what choices we're creating
+            \Log::info('Creating choices:', $validatedData['choices']);
             
             foreach ($validatedData['choices'] as $choiceData) {
                 $question->choices()->create($choiceData);
@@ -93,6 +102,9 @@ class QuestionController extends Controller
         }
 
         $question->load('choices');
+
+        // Debug: Log the final result
+        \Log::info('Final question with choices:', $question->toArray());
 
         return response()->json($question);
     }

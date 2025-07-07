@@ -32,7 +32,6 @@ class PublicQuizController extends Controller
             'description' => $quiz->description,
             'time_per_question' => $quiz->time_per_question,
             'max_attempts' => $quiz->max_attempts,
-            'has_pin' => !is_null($quiz->pin),
             'questions' => $quiz->questions->map(function($question) use ($quiz) {
                 return [
                     'id' => $question->id,

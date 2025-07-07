@@ -31,7 +31,6 @@ class QuizController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'max_attempts' => 'sometimes|integer|min:1|max:10|nullable',
-            'pin' => 'nullable|string|min:4|max:10',
             'time_per_question' => 'sometimes|integer|min:5|max:300|nullable',
         ]);
 
@@ -39,7 +38,6 @@ class QuizController extends Controller
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'max_attempts' => $validatedData['max_attempts'] ?? 1,
-            'pin' => $validatedData['pin'],
             'time_per_question' => $validatedData['time_per_question'] ?? 30,
             'slug' => Str::random(8),
         ]);
@@ -66,7 +64,6 @@ class QuizController extends Controller
             'title' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'max_attempts' => 'sometimes|integer|min:1|max:10|nullable',
-            'pin' => 'nullable|string|min:4|max:10',
             'time_per_question' => 'sometimes|integer|min:5|max:300|nullable',
         ]);
 

@@ -17,7 +17,6 @@ return new class extends Migration
     $table->text('description')->nullable();
     $table->integer('max_attempts')->default(3);
     $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->string('pin')->nullable();
     $table->timestamps();
 });
     }

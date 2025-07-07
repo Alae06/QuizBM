@@ -5,8 +5,7 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
         title: '',
         description: '',
         max_attempts: 3,
-        time_per_question: 30,
-        pin: ''
+        time_per_question: 30
     });
     const [errors, setErrors] = useState({});
 
@@ -16,8 +15,7 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
                 title: initialData.title || '',
                 description: initialData.description || '',
                 max_attempts: initialData.max_attempts || 3,
-                time_per_question: initialData.time_per_question || 30,
-                pin: initialData.pin || ''
+                time_per_question: initialData.time_per_question || 30
             });
         }
     }, [initialData]);
@@ -115,24 +113,6 @@ const QuizForm = ({ onSubmit, initialData = null, isEditing = false }) => {
                     />
                     <div className="form-text">Time limit for each question</div>
                 </div>
-            </div>
-
-            <div className="mb-4">
-                <label htmlFor="pin" className="form-label fw-bold text-dark">
-                    <i className="fas fa-key me-2 text-primary"></i>
-                    PIN (Optional)
-                </label>
-                <input
-                    type="text"
-                    name="pin"
-                    id="pin"
-                    value={quiz.pin}
-                    onChange={handleChange}
-                    className={`form-control ${errors.pin ? 'is-invalid' : ''}`}
-                    placeholder="4-10 characters (optional)"
-                />
-                {errors.pin && <div className="invalid-feedback">{errors.pin}</div>}
-                <div className="form-text">Add a PIN for additional security</div>
             </div>
 
             <div className="d-grid " >

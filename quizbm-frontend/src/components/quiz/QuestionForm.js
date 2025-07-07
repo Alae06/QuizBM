@@ -14,7 +14,13 @@ const QuestionForm = ({ onSubmit, onCancel, initialData = null, isEditing = fals
         if (initialData) {
             setQuestionText(initialData.question_text || '');
             setType(initialData.type || 'multiple_choice');
-            setChoices(initialData.choices || [{ text: '', is_correct: false }, { text: '', is_correct: false }]);
+            setChoices(
+                (initialData.choices || [{ text: '', is_correct: false }, { text: '', is_correct: false }])
+                .map(c => ({
+                    ...c,
+                    is_correct: typeof c.is_correct === 'boolean' ? c.is_correct : false
+                }))
+            );
             setTimePerQuestion(initialData.time_per_question || 30);
         }
     }, [initialData]);
@@ -74,12 +80,17 @@ const QuestionForm = ({ onSubmit, onCancel, initialData = null, isEditing = fals
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // Ensure all choices have is_correct as a boolean
+            // Ensure all choices have is_correct as a boolean and remove database fields
             const fixedChoices = choices.map(c => ({
-                ...c,
-                is_correct: typeof c.is_correct === 'boolean' ? c.is_correct : false
+                text: c.text,
+                is_correct: Boolean(c.is_correct === true || c.is_correct === 'true' || c.is_correct === 1 || c.is_correct === '1')
             }));
             const questionData = { question_text: questionText, type, choices: fixedChoices, time_per_question: timePerQuestion };
+            
+            // Debug: Log what we're sending
+            console.log('Sending question data:', questionData);
+            console.log('Choices with is_correct:', fixedChoices);
+            
             onSubmit(questionData);
         }
     };

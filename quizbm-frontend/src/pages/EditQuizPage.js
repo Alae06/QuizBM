@@ -31,7 +31,7 @@ const EditQuizPage = () => {
 
     const handleUpdateQuiz = async (quizData) => {
         try {
-            await quizService.updateQuiz(id, {data: quizData});
+            await quizService.updateQuiz(id, quizData);
             alert('Quiz updated successfully!');
             navigate('/dashboard');
         } catch (error) {
